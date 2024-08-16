@@ -3,7 +3,7 @@ import { ChildProps } from '@/types'
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
-
+import { ClerkProvider } from '@clerk/nextjs'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
@@ -13,18 +13,20 @@ export const metadata: Metadata = {
 
 function RootLayout({ children }: ChildProps) {
 	return (
-		<html lang='en' suppressHydrationWarning>
-			<body className={inter.className}>
-				<ThemeProvider
-					attribute='class'
-					defaultTheme='system'
-					enableSystem
-					disableTransitionOnChange
-				>
-					{children}
-				</ThemeProvider>
-			</body>
-		</html>
+		<ClerkProvider>
+			<html lang='en' suppressHydrationWarning>
+				<body className={inter.className}>
+					<ThemeProvider
+						attribute='class'
+						defaultTheme='system'
+						enableSystem
+						disableTransitionOnChange
+					>
+						{children}
+					</ThemeProvider>
+				</body>
+			</html>
+		</ClerkProvider>
 	)
 }
 export default RootLayout
