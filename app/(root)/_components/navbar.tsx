@@ -1,3 +1,4 @@
+'use client'
 import { ModeToggle } from '@/components/shared/mood'
 import { navLink } from '@/constants'
 import { Search } from 'lucide-react'
@@ -6,7 +7,11 @@ import { SignInButton, SignUpButton, SignedIn, SignedOut } from '@clerk/nextjs'
 import { Button } from '@/components/ui/button'
 import UserBox from '@/components/shared/userbox'
 import Logo from '@/components/shared/logo'
+import { usePathname } from 'next/navigation'
+import { cn } from '@/lib/utils'
 function Navbar() {
+	const pathname = usePathname()
+
 	return (
 		<div className='h-[10vh] backdrop-blur-sm border-b fixed z-40 inset-0 bg-background'>
 			<div className='container mx-auto h-[10vh] w-full flex items-center justify-between'>
@@ -23,7 +28,10 @@ function Navbar() {
 							<Link
 								href={item.route}
 								key={item.route}
-								className='font-semibold hover:text-blue-500'
+								className={cn(
+									'font-semibold hover:text-blue-500',
+									pathname === item.route && 'text-blue-500'
+								)}
 							>
 								{item.name}
 							</Link>

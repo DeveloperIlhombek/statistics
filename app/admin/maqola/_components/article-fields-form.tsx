@@ -14,7 +14,7 @@ import {
 	FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import { articlSchema } from '@/lib/valitadions'
+import { articleSchema } from '@/lib/valitadions'
 import {
 	Select,
 	SelectContent,
@@ -24,17 +24,42 @@ import {
 } from '@/components/ui/select'
 import { categories, sourceOfsites } from '@/constants'
 import { Button } from '@/components/ui/button'
+import { createArticle } from '@/actions/maqola.action'
+import { useState } from 'react'
+import { toast } from 'sonner'
+
+const defaultVal = {
+	article: '',
+	dataOfCreate: '',
+	source: '',
+	kategoriya: '',
+}
 
 function ArticleFiedsForm() {
-	const form = useForm<z.infer<typeof articlSchema>>({
-		resolver: zodResolver(articlSchema),
+	const [isLoading, setIsLoading] = useState(false)
+	const form = useForm<z.infer<typeof articleSchema>>({
+		resolver: zodResolver(articleSchema),
 		defaultValues: defaultVal,
 	})
+
+	function onSubmit(values: z.infer<typeof articleSchema>) {
+		console.log(values)
+		setIsLoading(true)
+
+		const promise = createArticle({ ...values })
+			.then(() => form.reset())
+			.finally(() => setIsLoading(false))
+		toast.promise(promise, {
+			loading: 'Article yuborilmoqda',
+			success: 'Article muvaffaqqiyatli yuborildi',
+			error: "Ba'zi xatoliklar tufayli yuborilmadi",
+		})
+	}
 
 	return (
 		<>
 			<Form {...form}>
-				<form className='space-y-3 mt-3'>
+				<form className='space-y-3 mt-3' onSubmit={form.handleSubmit(onSubmit)}>
 					<FormField
 						control={form.control}
 						name='article'
@@ -48,6 +73,7 @@ function ArticleFiedsForm() {
 										{...field}
 										className='bg-secondary'
 										placeholder='maqola yozish'
+										disabled={isLoading}
 									/>
 								</FormControl>
 								<FormMessage />
@@ -67,9 +93,9 @@ function ArticleFiedsForm() {
 								<FormControl>
 									<Input
 										{...field}
-										type='date'
 										className='bg-secondary'
 										placeholder='kun/oy/yil '
+										disabled={isLoading}
 									/>
 								</FormControl>
 								<FormMessage />
@@ -86,13 +112,20 @@ function ArticleFiedsForm() {
 										Manbaa<span className='text-red-500'>*</span>
 									</FormLabel>
 									<FormControl>
-										<Select>
+										<Select
+											defaultValue={field.value}
+											onValueChange={field.onChange}
+										>
 											<SelectTrigger className='w-full bg-secondary'>
 												<SelectValue placeholder='Web-sahifalar' />
 											</SelectTrigger>
 											<SelectContent>
 												{sourceOfsites.map(item => (
-													<SelectItem key={item} value={item}>
+													<SelectItem
+														key={item}
+														value={item}
+														disabled={isLoading}
+													>
 														{item}
 													</SelectItem>
 												))}
@@ -104,20 +137,27 @@ function ArticleFiedsForm() {
 						/>
 						<FormField
 							control={form.control}
-							name='source'
+							name='kategoriya'
 							render={({ field }) => (
 								<FormItem>
 									<FormLabel>
 										Maqola turi<span className='text-red-500'>*</span>
 									</FormLabel>
 									<FormControl>
-										<Select defaultValue={field.value}>
+										<Select
+											defaultValue={field.value}
+											onValueChange={field.onChange}
+										>
 											<SelectTrigger className='w-full bg-secondary'>
 												<SelectValue placeholder='Kategoriyalar' />
 											</SelectTrigger>
 											<SelectContent>
 												{categories.map(item => (
-													<SelectItem key={item} value={item}>
+													<SelectItem
+														key={item}
+														value={item}
+														disabled={isLoading}
+													>
 														{item}
 													</SelectItem>
 												))}
@@ -135,10 +175,11 @@ function ArticleFiedsForm() {
 							size={'lg'}
 							variant={'destructive'}
 							onClick={() => form.reset()}
+							disabled={isLoading}
 						>
 							Tozalash
 						</Button>
-						<Button type='submit' size={'lg'}>
+						<Button type='submit' size={'lg'} disabled={isLoading}>
 							Yuborish
 						</Button>
 					</div>
@@ -149,9 +190,3 @@ function ArticleFiedsForm() {
 }
 
 export default ArticleFiedsForm
-const defaultVal = {
-	article: '',
-	dataOfCreate: '',
-	source: '',
-	kategoriya: '',
-}

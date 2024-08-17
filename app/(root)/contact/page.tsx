@@ -6,7 +6,7 @@ async function Page() {
 			<iframe
 				src='https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1316.8203047107272!2d66.96102085470251!3d39.644797398263805!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3f4d18d2d1e7d5bd%3A0xa6176e47010064b6!2sScientific%20Library%20of%20Samarkand%20State%20University!5e0!3m2!1sen!2s!4v1722400363986!5m2!1sen!2s'
 				loading='lazy'
-				className='h-96 w-full'
+				className='h-96 w-full mt-20'
 			/>
 
 			<div className='container mx-auto max-w-6xl'>
