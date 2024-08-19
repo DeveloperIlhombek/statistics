@@ -19,3 +19,14 @@ export const createPhrase = async (data: IPrase) => {
 		}
 	}
 }
+export const getPhrase = async () => {
+	try {
+		await connectToDatabase()
+		const data = await Ibora.find()
+		return data
+	} catch (error: any) {
+		throw new Error(
+			`Something went wrong while creating proverb: ${error.message}`
+		)
+	}
+}

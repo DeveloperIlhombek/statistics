@@ -31,7 +31,7 @@ function PhraseFiedsForm() {
 
 		setIsLoading(true)
 		const promise = createPhrase({ ...values })
-			.then(() => form.reset)
+			.then(() => form.reset())
 			.finally(() => setIsLoading(false))
 
 		toast.promise(promise, {

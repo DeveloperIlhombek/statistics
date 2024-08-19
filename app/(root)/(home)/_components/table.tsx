@@ -16,7 +16,6 @@ import {
 import { ArrowUpDown, ChevronDown, MoreHorizontal } from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
-import { Checkbox } from '@/components/ui/checkbox'
 import {
 	DropdownMenu,
 	DropdownMenuCheckboxItem,
@@ -36,301 +35,15 @@ import {
 	TableRow,
 } from '@/components/ui/table'
 import { ScrollArea } from '@/components/ui/scroll-area'
+import { getProverb } from '@/actions/maqol.action'
 
-const data: Payment[] = [
-	{
-		id: 'm5gr84i9',
-		tarif: 'defininition',
-		status: 'success',
-		maqol: "Aylanasi ovuli, To'garagi to'rkuni.",
-	},
-	{
-		id: '3u1reuv4',
-		tarif: 'defininition',
-		status: 'success',
-		maqol: 'Ayrilmagin elingdan, Quvvat ketar belingdan.',
-	},
-	{
-		id: 'derv1ws0',
-		tarif: 'defininition',
-		status: 'processing',
-		maqol: "Badqavm bo'lsang bo'l, Beqavm bo'lma. ",
-	},
-	{
-		id: '5kma53ae',
-		tarif: 'defininition',
-		status: 'success',
-		maqol: 'Baliq suv bilan tirik, Odam — el bilan.',
-	},
-	{
-		id: 'bhqecj4p',
-		tarif: 'defininition',
-		status: 'failed',
-		maqol: 'Begona tuproq — devona tuproq.',
-	},
-	{
-		id: 'bhqecj4pk',
-		tarif: 'defininition',
-		status: 'failed',
-		maqol: 'Betkay ketar, bel qolar, Beklar ketar, el qolar.',
-	},
-	{
-		id: 'bhqecj4pk',
-		tarif: 'defininition',
-		status: 'failed',
-		maqol: 'Betkay ketar, bel qolar, Beklar ketar, el qolar.',
-	},
-	{
-		id: 'bhqecj4pk',
-		tarif: 'defininition',
-		status: 'failed',
-		maqol: 'Betkay ketar, bel qolar, Beklar ketar, el qolar.',
-	},
-	{
-		id: 'bhqecj4pk',
-		tarif: 'defininition',
-		status: 'failed',
-		maqol: 'Betkay ketar, bel qolar, Beklar ketar, el qolar.',
-	},
-	{
-		id: 'bhqecj4pk',
-		tarif: 'defininition',
-		status: 'failed',
-		maqol: 'Betkay ketar, bel qolar, Beklar ketar, el qolar.',
-	},
-	{
-		id: 'bhqecj4pk',
-		tarif: 'defininition',
-		status: 'failed',
-		maqol: 'Betkay ketar, bel qolar, Beklar ketar, el qolar.',
-	},
-	{
-		id: 'bhqecj4pk',
-		tarif: 'defininition',
-		status: 'failed',
-		maqol: 'Betkay ketar, bel qolar, Beklar ketar, el qolar.',
-	},
-	{
-		id: 'bhqecj4pk',
-		tarif: 'defininition',
-		status: 'failed',
-		maqol: 'Betkay ketar, bel qolar, Beklar ketar, el qolar.',
-	},
-	{
-		id: 'bhqecj4pk',
-		tarif: 'defininition',
-		status: 'failed',
-		maqol: 'Betkay ketar, bel qolar, Beklar ketar, el qolar.',
-	},
-	{
-		id: 'bhqecj4pk',
-		tarif: 'defininition',
-		status: 'failed',
-		maqol: 'Betkay ketar, bel qolar, Beklar ketar, el qolar.',
-	},
-	{
-		id: 'bhqecj4pk',
-		tarif: 'defininition',
-		status: 'failed',
-		maqol: 'Betkay ketar, bel qolar, Beklar ketar, el qolar.',
-	},
-	{
-		id: 'bhqecj4pk',
-		tarif: 'defininition',
-		status: 'failed',
-		maqol: 'Betkay ketar, bel qolar, Beklar ketar, el qolar.',
-	},
-	{
-		id: 'bhqecj4pk',
-		tarif: 'defininition',
-		status: 'failed',
-		maqol: 'Betkay ketar, bel qolar, Beklar ketar, el qolar.',
-	},
-	{
-		id: 'bhqecj4pk',
-		tarif: 'defininition',
-		status: 'failed',
-		maqol: 'Betkay ketar, bel qolar, Beklar ketar, el qolar.',
-	},
-	{
-		id: 'bhqecj4pk',
-		tarif: 'defininition',
-		status: 'failed',
-		maqol: 'Betkay ketar, bel qolar, Beklar ketar, el qolar.',
-	},
-	{
-		id: 'bhqecj4pk',
-		tarif: 'defininition',
-		status: 'failed',
-		maqol: 'Betkay ketar, bel qolar, Beklar ketar, el qolar.',
-	},
-	{
-		id: 'bhqecj4pk',
-		tarif: 'defininition',
-		status: 'failed',
-		maqol: 'Betkay ketar, bel qolar, Beklar ketar, el qolar.',
-	},
-	{
-		id: 'bhqecj4pk',
-		tarif: 'defininition',
-		status: 'failed',
-		maqol: 'Betkay ketar, bel qolar, Beklar ketar, el qolar.',
-	},
-	{
-		id: 'bhqecj4pk',
-		tarif: 'defininition',
-		status: 'failed',
-		maqol: 'Betkay ketar, bel qolar, Beklar ketar, el qolar.',
-	},
-	{
-		id: 'bhqecj4pk',
-		tarif: 'defininition',
-		status: 'failed',
-		maqol: 'Betkay ketar, bel qolar, Beklar ketar, el qolar.',
-	},
-	{
-		id: 'bhqecj4pk',
-		tarif: 'defininition',
-		status: 'failed',
-		maqol: 'Betkay ketar, bel qolar, Beklar ketar, el qolar.',
-	},
-	{
-		id: 'bhqecj4pk',
-		tarif: 'defininition',
-		status: 'failed',
-		maqol: 'Betkay ketar, bel qolar, Beklar ketar, el qolar.',
-	},
-	{
-		id: 'bhqecj4pk',
-		tarif: 'defininition',
-		status: 'failed',
-		maqol: 'Betkay ketar, bel qolar, Beklar ketar, el qolar.',
-	},
-	{
-		id: 'bhqecj4pk',
-		tarif: 'defininition',
-		status: 'failed',
-		maqol: 'Betkay ketar, bel qolar, Beklar ketar, el qolar.',
-	},
-	{
-		id: 'bhqecj4pk',
-		tarif: 'defininition',
-		status: 'failed',
-		maqol: 'Betkay ketar, bel qolar, Beklar ketar, el qolar.',
-	},
-	{
-		id: 'bhqecj4pk',
-		tarif: 'defininition',
-		status: 'failed',
-		maqol: 'Betkay ketar, bel qolar, Beklar ketar, el qolar.',
-	},
-	{
-		id: 'bhqecj4pk',
-		tarif: 'defininition',
-		status: 'failed',
-		maqol: 'Betkay ketar, bel qolar, Beklar ketar, el qolar.',
-	},
-	{
-		id: 'bhqecj4pk',
-		tarif: 'defininition',
-		status: 'failed',
-		maqol: 'Betkay ketar, bel qolar, Beklar ketar, el qolar.',
-	},
-	{
-		id: 'bhqecj4pk',
-		tarif: 'defininition',
-		status: 'failed',
-		maqol: 'Betkay ketar, bel qolar, Beklar ketar, el qolar.',
-	},
-	{
-		id: 'bhqecj4pk',
-		tarif: 'defininition',
-		status: 'failed',
-		maqol: 'Betkay ketar, bel qolar, Beklar ketar, el qolar.',
-	},
-	{
-		id: 'bhqecj4pk',
-		tarif: 'defininition',
-		status: 'failed',
-		maqol: 'Betkay ketar, bel qolar, Beklar ketar, el qolar.',
-	},
-	{
-		id: 'bhqecj4pk',
-		tarif: 'defininition',
-		status: 'failed',
-		maqol: 'Betkay ketar, bel qolar, Beklar ketar, el qolar.',
-	},
-	{
-		id: 'bhqecj4pk',
-		tarif: 'defininition',
-		status: 'failed',
-		maqol: 'Betkay ketar, bel qolar, Beklar ketar, el qolar.',
-	},
-	{
-		id: 'bhqecj4pk',
-		tarif: 'defininition',
-		status: 'failed',
-		maqol: 'Betkay ketar, bel qolar, Beklar ketar, el qolar.',
-	},
-	{
-		id: 'bhqecj4pk',
-		tarif: 'defininition',
-		status: 'failed',
-		maqol: 'Betkay ketar, bel qolar, Beklar ketar, el qolar.',
-	},
-	{
-		id: 'bhqecj4pk',
-		tarif: 'defininition',
-		status: 'failed',
-		maqol: 'Betkay ketar, bel qolar, Beklar ketar, el qolar.',
-	},
-	{
-		id: 'bhqecj4pk',
-		tarif: 'defininition',
-		status: 'failed',
-		maqol: 'Betkay ketar, bel qolar, Beklar ketar, el qolar.',
-	},
-]
-
-export type Payment = {
-	id: string
-	tarif: string
-	status: 'pending' | 'processing' | 'success' | 'failed'
-	maqol: string
+export type ProverbType = {
+	_id: string
+	proverb: string
 }
-
-export const columns: ColumnDef<Payment>[] = [
+export const columns: ColumnDef<ProverbType>[] = [
 	{
-		id: 'select',
-		header: ({ table }) => (
-			<Checkbox
-				checked={
-					table.getIsAllPageRowsSelected() ||
-					(table.getIsSomePageRowsSelected() && 'indeterminate')
-				}
-				onCheckedChange={value => table.toggleAllPageRowsSelected(!!value)}
-				aria-label='Select all'
-			/>
-		),
-		cell: ({ row }) => (
-			<Checkbox
-				checked={row.getIsSelected()}
-				onCheckedChange={value => row.toggleSelected(!!value)}
-				aria-label='Select row'
-			/>
-		),
-		enableSorting: false,
-		enableHiding: false,
-	},
-	{
-		accessorKey: 'status',
-		header: 'Status',
-		cell: ({ row }) => (
-			<div className='capitalize'>{row.getValue('status')}</div>
-		),
-	},
-	{
-		accessorKey: 'maqol',
+		accessorKey: 'proverb',
 		header: ({ column }) => {
 			return (
 				<Button
@@ -342,23 +55,11 @@ export const columns: ColumnDef<Payment>[] = [
 				</Button>
 			)
 		},
-		cell: ({ row }) => <div className='lowercase'>{row.getValue('maqol')}</div>,
+		cell: ({ row }) => (
+			<div className='lowercase'>{row.getValue('proverb')}</div>
+		),
 	},
-	{
-		accessorKey: 'tarif',
-		header: () => <div className='text-right'>tarif</div>,
-		cell: ({ row }) => {
-			const amount = parseFloat(row.getValue('tarif'))
 
-			// Format the amount as a dollar amount
-			const formatted = new Intl.NumberFormat('en-US', {
-				style: 'currency',
-				currency: 'USD',
-			}).format(amount)
-
-			return <div className='text-right font-medium'>{formatted}</div>
-		},
-	},
 	{
 		id: 'actions',
 		enableHiding: false,
@@ -374,15 +75,13 @@ export const columns: ColumnDef<Payment>[] = [
 						</Button>
 					</DropdownMenuTrigger>
 					<DropdownMenuContent align='end'>
-						<DropdownMenuLabel>Actions</DropdownMenuLabel>
+						<DropdownMenuLabel>Amallar</DropdownMenuLabel>
 						<DropdownMenuItem
-							onClick={() => navigator.clipboard.writeText(payment.id)}
+							onClick={() => navigator.clipboard.writeText(payment.proverb)}
 						>
-							Copy payment ID
+							Maqoldan nusxalash
 						</DropdownMenuItem>
 						<DropdownMenuSeparator />
-						<DropdownMenuItem>View customer</DropdownMenuItem>
-						<DropdownMenuItem>View payment details</DropdownMenuItem>
 					</DropdownMenuContent>
 				</DropdownMenu>
 			)
@@ -391,6 +90,24 @@ export const columns: ColumnDef<Payment>[] = [
 ]
 
 export function DataTableDemo() {
+	const [data, setData] = React.useState<ProverbType[]>([])
+	const [loading, setLoading] = React.useState(true)
+	const [error, setError] = React.useState<string | null>(null)
+
+	React.useEffect(() => {
+		async function fetchData() {
+			try {
+				const maqollar = await getProverb()
+				setData(maqollar)
+			} catch (err) {
+				setError('Maqollarni yuklashda xatolik yuz berdi.')
+			} finally {
+				setLoading(false)
+			}
+		}
+		fetchData()
+	}, [])
+
 	const [sorting, setSorting] = React.useState<SortingState>([])
 	const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
 		[]
@@ -421,21 +138,21 @@ export function DataTableDemo() {
 	return (
 		<div className='w-full'>
 			<div className='text-5xl text-blue-500 my-4 text-center font-bold'>
-				Maqolalarni qisqa ta&apos;riflari orqali izlang{' '}
+				Foydalanilgan maqollarni qidirish{' '}
 			</div>
 			<div className='flex items-center py-4'>
 				<Input
-					placeholder='Filter emails...'
-					value={(table.getColumn('maqol')?.getFilterValue() as string) ?? ''}
+					placeholder='Maqollarni izlash ...'
+					value={(table.getColumn('proverb')?.getFilterValue() as string) ?? ''}
 					onChange={event =>
-						table.getColumn('maqol')?.setFilterValue(event.target.value)
+						table.getColumn('proverb')?.setFilterValue(event.target.value)
 					}
 					className='max-w-sm'
 				/>
 				<DropdownMenu>
 					<DropdownMenuTrigger asChild>
 						<Button variant='outline' className='ml-auto'>
-							Columns <ChevronDown className='ml-2 h-4 w-4' />
+							Ustunlar <ChevronDown className='ml-2 h-4 w-4' />
 						</Button>
 					</DropdownMenuTrigger>
 					<DropdownMenuContent align='end'>
@@ -501,7 +218,7 @@ export function DataTableDemo() {
 										colSpan={columns.length}
 										className='h-24 text-center'
 									>
-										No results.
+										Hali ma&apos;lumotlar yo&apos;q
 									</TableCell>
 								</TableRow>
 							)}
@@ -512,27 +229,26 @@ export function DataTableDemo() {
 
 			<div className='flex items-center justify-end space-x-2 py-4'>
 				<div className='flex-1 text-sm text-muted-foreground'>
-					{table.getFilteredSelectedRowModel().rows.length} of{' '}
-					{table.getFilteredRowModel().rows.length} row(s) selected.
+					{table.getFilteredRowModel().rows.length} ta maqol topildi
 				</div>
-				{/* <div className='space-x-2'>
+				<div className='space-x-2'>
 					<Button
-						variant='secondary'
+						variant='outline'
 						size='sm'
 						onClick={() => table.previousPage()}
 						disabled={!table.getCanPreviousPage()}
 					>
-						Previous
+						Oldingisi
 					</Button>
 					<Button
-						variant='destructive'
+						variant='outline'
 						size='sm'
 						onClick={() => table.nextPage()}
 						disabled={!table.getCanNextPage()}
 					>
-						Next
+						Keyingisi
 					</Button>
-				</div> */}
+				</div>
 			</div>
 		</div>
 	)

@@ -3,6 +3,7 @@
 import { connectToDatabase } from '@/lib/mongoose'
 import { IArticle } from './types'
 import Maqola from '@/database/maqola.model'
+import { IArticles } from '@/type'
 
 export const createArticle = async (data: IArticle) => {
 	try {
@@ -17,5 +18,15 @@ export const createArticle = async (data: IArticle) => {
 		} else {
 			throw new Error('An unknown error occurred while creating article!')
 		}
+	}
+}
+
+export const getArticle = async () => {
+	try {
+		await connectToDatabase()
+		const data = await Maqola.find()
+		return data as IArticles[]
+	} catch (error) {
+		console.error('Something went wrong while getting article !')
 	}
 }
