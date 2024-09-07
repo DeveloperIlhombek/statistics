@@ -36,9 +36,9 @@ import {
 } from '@/components/ui/table'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { getPhrase } from '@/actions/ibora.action'
-import { PraseType } from '@/app.type'
+import { PhraseType } from '@/app.type'
 
-export const columns: ColumnDef<PraseType>[] = [
+export const columns: ColumnDef<PhraseType>[] = [
 	{
 		accessorKey: 'phrase',
 		header: ({ column }) => {
@@ -104,7 +104,7 @@ export const columns: ColumnDef<PraseType>[] = [
 ]
 
 export function IboraTable() {
-	const [data, setData] = React.useState<PraseType[]>([])
+	const [data, setData] = React.useState<PhraseType[]>([])
 	const [loading, setLoading] = React.useState(true)
 	const [error, setError] = React.useState<string | null>(null)
 
