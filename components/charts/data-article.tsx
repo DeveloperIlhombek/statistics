@@ -147,6 +147,7 @@ export function DataArticle() {
 	const [filteredArticles, setFilteredArticles] = React.useState<IArticles[]>(
 		[]
 	)
+	const [searchPhrase, setSearchPhrase] = React.useState<string>('') // Yangi state qo'shildi
 
 	// Helper function to extract first three letters of each word in an array
 	const getFirstThreeLetters = (words: string[]) =>
@@ -182,16 +183,14 @@ export function DataArticle() {
 		})
 	}, [phrase])
 
+	// Filter by input phrase (searchPhrase)
 	React.useEffect(() => {
-		const matchingArticles = processedArticles
-			.filter(article =>
-				processedPhrases.some(phrase => article.includes(phrase))
-			)
-			.map(
-				matchingArticle => data[processedArticles.indexOf(matchingArticle)] // Bu yerda to'liq obyektni olamiz
-			)
-		setFilteredArticles(matchingArticles) // filteredArticles endi IArticles tipida bo'ladi
-	}, [processedArticles, processedPhrases, data])
+		const matchingArticles = data.filter(
+			article =>
+				article.article.toLowerCase().includes(searchPhrase.toLowerCase()) // Saralash ibora orqali
+		)
+		setFilteredArticles(matchingArticles)
+	}, [searchPhrase, data])
 
 	const table = useReactTable({
 		data: filteredArticles,
@@ -225,10 +224,8 @@ export function DataArticle() {
 				/>
 				<Input
 					placeholder='Filter ibora...'
-					value={(table.getColumn('source')?.getFilterValue() as string) ?? ''}
-					onChange={event =>
-						table.getColumn('source')?.setFilterValue(event.target.value)
-					}
+					value={searchPhrase} // Input qiymatini `searchPhrase` bilan bog'lash
+					onChange={event => setSearchPhrase(event.target.value)}
 					className='max-w-full '
 				/>
 				<DropdownMenu>
