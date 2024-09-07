@@ -9,5 +9,4 @@ export interface IArticle {
 	article: string
 	dataOfCreate: string
 	source: string
-	kategoriya: string
 }

@@ -1,16 +1,17 @@
-export interface IArticles {
+export type ArticleType = {
 	_id: string
 	article: string
 	dataOfCreate: string
 	source: string
 }
-export interface IProverbs {
+
+export type ProverbType = {
 	_id: string
 	proverb: string
 }
-export interface IPrases {
+
+export type PhraseType = {
 	_id: string
-	proverb: string
 	phrase: string
 	description: string
 }

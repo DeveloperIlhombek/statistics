@@ -64,4 +64,3 @@ export const dataOfChart = [
 ]
 
 export const sourceOfsites = ['kun.uz', 'UzA', "Ma'rifat", 'Fanlar academiyasi']
-export const categories = ['ilmiy', 'siyosiy', 'iqtisodiy', "ma'rifiy"]

@@ -2,6 +2,11 @@
 
 import * as React from 'react'
 import {
+	CaretSortIcon,
+	ChevronDownIcon,
+	DotsHorizontalIcon,
+} from '@radix-ui/react-icons'
+import {
 	ColumnDef,
 	ColumnFiltersState,
 	SortingState,
@@ -13,7 +18,6 @@ import {
 	getSortedRowModel,
 	useReactTable,
 } from '@tanstack/react-table'
-import { ArrowUpDown, ChevronDown, MoreHorizontal } from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
 import {
@@ -22,7 +26,6 @@ import {
 	DropdownMenuContent,
 	DropdownMenuItem,
 	DropdownMenuLabel,
-	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { Input } from '@/components/ui/input'
@@ -34,27 +37,73 @@ import {
 	TableHeader,
 	TableRow,
 } from '@/components/ui/table'
-import { ScrollArea } from '@/components/ui/scroll-area'
-import { getProverb } from '@/actions/maqol.action'
-import { ProverbType } from '@/app.type'
+import { getArticle } from '@/actions/maqola.action'
+import { getPhrase } from '@/actions/ibora.action'
+import { ScrollArea } from '../ui/scroll-area'
+import { ArticleType, PhraseType } from '@/app.type'
+import { IArticles } from '@/type'
 
-export const columns: ColumnDef<ProverbType>[] = [
+export const columns: ColumnDef<ArticleType>[] = [
 	{
-		accessorKey: 'proverb',
+		accessorKey: 'dataOfCreate',
 		header: ({ column }) => {
 			return (
 				<Button
 					variant='ghost'
 					onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
 				>
-					Maqol
-					<ArrowUpDown className='ml-2 h-4 w-4' />
+					Sana
+					<CaretSortIcon className='ml-2 h-4 w-4' />
 				</Button>
 			)
 		},
 		cell: ({ row }) => (
-			<div className='lowercase'>{row.getValue('proverb')}</div>
+			<div className='lowercase'>{row.getValue('dataOfCreate')}</div>
 		),
+	},
+	{
+		accessorKey: 'source',
+		header: ({ column }) => {
+			return (
+				<Button
+					variant='ghost'
+					onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+				>
+					Manbaa
+					<CaretSortIcon className='ml-2 h-4 w-4' />
+				</Button>
+			)
+		},
+		cell: ({ row }) => (
+			<div className='capitalize'>{row.getValue('source')}</div>
+		),
+	},
+
+	{
+		accessorKey: 'article',
+		header: ({ column }) => {
+			return (
+				<Button
+					variant='ghost'
+					onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+				>
+					Maqola
+					<CaretSortIcon className='ml-2 h-4 w-4' />
+				</Button>
+			)
+		},
+		cell: ({ row }) => {
+			const formatArticle = row.getValue('article') as string
+
+			const formatted = () => {
+				if (formatArticle.length > 100) {
+					return formatArticle.substring(0, 100) + '...'
+				}
+				return formatArticle
+			}
+
+			return <div>{formatted()}</div>
+		},
 	},
 
 	{
@@ -68,17 +117,16 @@ export const columns: ColumnDef<ProverbType>[] = [
 					<DropdownMenuTrigger asChild>
 						<Button variant='ghost' className='h-8 w-8 p-0'>
 							<span className='sr-only'>Open menu</span>
-							<MoreHorizontal className='h-4 w-4' />
+							<DotsHorizontalIcon className='h-4 w-4' />
 						</Button>
 					</DropdownMenuTrigger>
 					<DropdownMenuContent align='end'>
-						<DropdownMenuLabel>Amallar</DropdownMenuLabel>
+						<DropdownMenuLabel>Qulayliklar</DropdownMenuLabel>
 						<DropdownMenuItem
-							onClick={() => navigator.clipboard.writeText(payment.proverb)}
+							onClick={() => navigator.clipboard.writeText(payment.article)}
 						>
-							Maqoldan nusxalash
+							Maqoladan nusxa olish
 						</DropdownMenuItem>
-						<DropdownMenuSeparator />
 					</DropdownMenuContent>
 				</DropdownMenu>
 			)
@@ -86,35 +134,67 @@ export const columns: ColumnDef<ProverbType>[] = [
 	},
 ]
 
-export function DataTableDemo() {
-	const [data, setData] = React.useState<ProverbType[]>([])
-	const [loading, setLoading] = React.useState(true)
-	const [error, setError] = React.useState<string | null>(null)
-
-	React.useEffect(() => {
-		async function fetchData() {
-			try {
-				const maqollar = await getProverb()
-				setData(maqollar)
-			} catch (err) {
-				setError('Maqollarni yuklashda xatolik yuz berdi.')
-			} finally {
-				setLoading(false)
-			}
-		}
-		fetchData()
-	}, [])
-
+export function DataArticle() {
 	const [sorting, setSorting] = React.useState<SortingState>([])
+	const [data, setData] = React.useState<ArticleType[]>([])
+	const [phrase, setPhrase] = React.useState<PhraseType[]>([])
 	const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
 		[]
 	)
 	const [columnVisibility, setColumnVisibility] =
 		React.useState<VisibilityState>({})
 	const [rowSelection, setRowSelection] = React.useState({})
+	const [filteredArticles, setFilteredArticles] = React.useState<IArticles[]>(
+		[]
+	)
+
+	// Helper function to extract first three letters of each word in an array
+	const getFirstThreeLetters = (words: string[]) =>
+		words.map(word => word.slice(0, 3))
+
+	// Fetch articles and phrases on component mount
+	React.useEffect(() => {
+		async function fetchArticleAndPhrase() {
+			try {
+				const articles = await getArticle()
+				const phrases = await getPhrase()
+				setData(articles || [])
+				setPhrase(phrases)
+			} catch (error) {
+				throw new Error('Something went wrong when fetch articles')
+			}
+		}
+		fetchArticleAndPhrase()
+	}, [])
+
+	// Memoized data processing for articles and phrases
+	const processedArticles = React.useMemo(() => {
+		return data.map(item => {
+			const words = item.article.split(' ')
+			return getFirstThreeLetters(words).join(' ')
+		})
+	}, [data])
+
+	const processedPhrases = React.useMemo(() => {
+		return phrase.map(item => {
+			const words = item.phrase.split(' ')
+			return getFirstThreeLetters(words).join(' ')
+		})
+	}, [phrase])
+
+	React.useEffect(() => {
+		const matchingArticles = processedArticles
+			.filter(article =>
+				processedPhrases.some(phrase => article.includes(phrase))
+			)
+			.map(
+				matchingArticle => data[processedArticles.indexOf(matchingArticle)] // Bu yerda to'liq obyektni olamiz
+			)
+		setFilteredArticles(matchingArticles) // filteredArticles endi IArticles tipida bo'ladi
+	}, [processedArticles, processedPhrases, data])
 
 	const table = useReactTable({
-		data,
+		data: filteredArticles,
 		columns,
 		onSortingChange: setSorting,
 		onColumnFiltersChange: setColumnFilters,
@@ -134,22 +214,27 @@ export function DataTableDemo() {
 
 	return (
 		<div className='w-full'>
-			<div className='text-5xl text-blue-500 my-4 text-center font-bold'>
-				Foydalanilgan maqollarni qidirish{' '}
-			</div>
-			<div className='flex items-center py-4'>
+			<div className='mx-2 flex items-center py-4 gap-4'>
 				<Input
-					placeholder='Maqollarni izlash ...'
-					value={(table.getColumn('proverb')?.getFilterValue() as string) ?? ''}
+					placeholder='Filter maqol...'
+					value={(table.getColumn('article')?.getFilterValue() as string) ?? ''}
 					onChange={event =>
-						table.getColumn('proverb')?.setFilterValue(event.target.value)
+						table.getColumn('article')?.setFilterValue(event.target.value)
 					}
-					className='max-w-sm'
+					className='max-w-full '
+				/>
+				<Input
+					placeholder='Filter ibora...'
+					value={(table.getColumn('source')?.getFilterValue() as string) ?? ''}
+					onChange={event =>
+						table.getColumn('source')?.setFilterValue(event.target.value)
+					}
+					className='max-w-full '
 				/>
 				<DropdownMenu>
 					<DropdownMenuTrigger asChild>
 						<Button variant='outline' className='ml-auto'>
-							Ustunlar <ChevronDown className='ml-2 h-4 w-4' />
+							Columns <ChevronDownIcon className='ml-2 h-4 w-4' />
 						</Button>
 					</DropdownMenuTrigger>
 					<DropdownMenuContent align='end'>
@@ -171,8 +256,8 @@ export function DataTableDemo() {
 					</DropdownMenuContent>
 				</DropdownMenu>
 			</div>
-			<ScrollArea className='h-96'>
-				<div className='rounded-md border'>
+			<div className='rounded-md border '>
+				<ScrollArea className='h-48'>
 					<Table>
 						<TableHeader>
 							{table.getHeaderGroups().map(headerGroup => (
@@ -215,37 +300,13 @@ export function DataTableDemo() {
 										colSpan={columns.length}
 										className='h-24 text-center'
 									>
-										Hali ma&apos;lumotlar yo&apos;q
+										No results.
 									</TableCell>
 								</TableRow>
 							)}
 						</TableBody>
 					</Table>
-				</div>
-			</ScrollArea>
-
-			<div className='flex items-center justify-end space-x-2 py-4'>
-				<div className='flex-1 text-sm text-muted-foreground'>
-					{table.getFilteredRowModel().rows.length} ta maqol topildi
-				</div>
-				<div className='space-x-2'>
-					<Button
-						variant='outline'
-						size='sm'
-						onClick={() => table.previousPage()}
-						disabled={!table.getCanPreviousPage()}
-					>
-						Oldingisi
-					</Button>
-					<Button
-						variant='outline'
-						size='sm'
-						onClick={() => table.nextPage()}
-						disabled={!table.getCanNextPage()}
-					>
-						Keyingisi
-					</Button>
-				</div>
+				</ScrollArea>
 			</div>
 		</div>
 	)

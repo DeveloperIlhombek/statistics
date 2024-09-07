@@ -36,12 +36,7 @@ import {
 } from '@/components/ui/table'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { getPhrase } from '@/actions/ibora.action'
-
-export type PraseType = {
-	_id: string
-	phrase: string
-	description: string
-}
+import { PraseType } from '@/app.type'
 
 export const columns: ColumnDef<PraseType>[] = [
 	{
@@ -169,7 +164,7 @@ export function IboraTable() {
 						onChange={event =>
 							table.getColumn('description')?.setFilterValue(event.target.value)
 						}
-						className='max-w-sm'
+						className='max-w-sm ring-1'
 					/>
 					<DropdownMenu>
 						<DropdownMenuTrigger asChild>

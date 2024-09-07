@@ -13,5 +13,4 @@ export const articleSchema = z.object({
 	article: z.string().min(20),
 	dataOfCreate: z.string().length(10),
 	source: z.string().min(3),
-	kategoriya: z.string().min(5),
 })

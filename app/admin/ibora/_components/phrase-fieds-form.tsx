@@ -27,8 +27,6 @@ function PhraseFiedsForm() {
 	})
 
 	function onSubmit(values: z.infer<typeof phraseSchema>) {
-		console.log(values)
-
 		setIsLoading(true)
 		const promise = createPhrase({ ...values })
 			.then(() => form.reset())

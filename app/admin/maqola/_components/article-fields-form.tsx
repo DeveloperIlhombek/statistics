@@ -22,7 +22,7 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from '@/components/ui/select'
-import { categories, sourceOfsites } from '@/constants'
+import { sourceOfsites } from '@/constants'
 import { Button } from '@/components/ui/button'
 import { createArticle } from '@/actions/maqola.action'
 import { useState } from 'react'
@@ -32,7 +32,6 @@ const defaultVal = {
 	article: '',
 	dataOfCreate: '',
 	source: '',
-	kategoriya: '',
 }
 
 function ArticleFiedsForm() {
@@ -43,7 +42,6 @@ function ArticleFiedsForm() {
 	})
 
 	function onSubmit(values: z.infer<typeof articleSchema>) {
-		console.log(values)
 		setIsLoading(true)
 
 		const promise = createArticle({ ...values })
@@ -121,38 +119,6 @@ function ArticleFiedsForm() {
 											</SelectTrigger>
 											<SelectContent>
 												{sourceOfsites.map(item => (
-													<SelectItem
-														key={item}
-														value={item}
-														disabled={isLoading}
-													>
-														{item}
-													</SelectItem>
-												))}
-											</SelectContent>
-										</Select>
-									</FormControl>
-								</FormItem>
-							)}
-						/>
-						<FormField
-							control={form.control}
-							name='kategoriya'
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>
-										Maqola turi<span className='text-red-500'>*</span>
-									</FormLabel>
-									<FormControl>
-										<Select
-											defaultValue={field.value}
-											onValueChange={field.onChange}
-										>
-											<SelectTrigger className='w-full bg-secondary'>
-												<SelectValue placeholder='Kategoriyalar' />
-											</SelectTrigger>
-											<SelectContent>
-												{categories.map(item => (
 													<SelectItem
 														key={item}
 														value={item}

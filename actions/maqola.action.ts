@@ -25,7 +25,7 @@ export const getArticle = async () => {
 	try {
 		await connectToDatabase()
 		const data = await Maqola.find()
-		return data as IArticles[]
+		return data
 	} catch (error) {
 		console.error('Something went wrong while getting article !')
 	}
