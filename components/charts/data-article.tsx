@@ -137,7 +137,7 @@ export const columns: ColumnDef<ArticleType>[] = [
 export function DataArticle() {
 	const [sorting, setSorting] = React.useState<SortingState>([])
 	const [data, setData] = React.useState<ArticleType[]>([])
-	const [phrase, setPhrase] = React.useState<PhraseType[]>([])
+	const [phrase, setPhrase] = React.useState<string>('')
 	const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
 		[]
 	)
@@ -147,7 +147,6 @@ export function DataArticle() {
 	const [filteredArticles, setFilteredArticles] = React.useState<IArticles[]>(
 		[]
 	)
-	const [searchPhrase, setSearchPhrase] = React.useState<string>('') // Yangi state qo'shildi
 
 	// Helper function to extract first three letters of each word in an array
 	const getFirstThreeLetters = (words: string[]) =>
@@ -158,9 +157,9 @@ export function DataArticle() {
 		async function fetchArticleAndPhrase() {
 			try {
 				const articles = await getArticle()
-				const phrases = await getPhrase()
+				// const phrases = await getPhrase()
 				setData(articles || [])
-				setPhrase(phrases)
+				// setPhrase(phrases)
 			} catch (error) {
 				throw new Error('Something went wrong when fetch articles')
 			}
@@ -168,29 +167,26 @@ export function DataArticle() {
 		fetchArticleAndPhrase()
 	}, [])
 
-	// Memoized data processing for articles and phrases
-	const processedArticles = React.useMemo(() => {
-		return data.map(item => {
-			const words = item.article.split(' ')
-			return getFirstThreeLetters(words).join(' ')
-		})
-	}, [data])
-
-	const processedPhrases = React.useMemo(() => {
-		return phrase.map(item => {
-			const words = item.phrase.split(' ')
-			return getFirstThreeLetters(words).join(' ')
-		})
-	}, [phrase])
-
 	// Filter by input phrase (searchPhrase)
 	React.useEffect(() => {
-		const matchingArticles = data.filter(
-			article =>
-				article.article.toLowerCase().includes(searchPhrase.toLowerCase()) // Saralash ibora orqali
-		)
+		const matchingArticles = data.filter(article => {
+			// Phrase va maqoladagi so'zlarni boshidagi 3 harf bilan taqqoslash
+			const articleWords = article.article
+				.split(' ')
+				.map(word => word.slice(0, 3))
+			const phraseWords = phrase.split(' ').map(word => word.slice(0, 3))
+
+			// Agar maqoladagi so'zlarning boshidagi 3 harf phrase bilan mos kelsa, maqolani qabul qiladi
+			return phraseWords.every(phraseWord =>
+				articleWords.some(articleWord =>
+					articleWord.toLowerCase().includes(phraseWord.toLowerCase())
+				)
+			)
+		})
+
 		setFilteredArticles(matchingArticles)
-	}, [searchPhrase, data])
+	}, [phrase, data])
+	console.log(filteredArticles)
 
 	const table = useReactTable({
 		data: filteredArticles,
@@ -215,17 +211,9 @@ export function DataArticle() {
 		<div className='w-full'>
 			<div className='mx-2 flex items-center py-4 gap-4'>
 				<Input
-					placeholder='Filter maqol...'
-					value={(table.getColumn('article')?.getFilterValue() as string) ?? ''}
-					onChange={event =>
-						table.getColumn('article')?.setFilterValue(event.target.value)
-					}
-					className='max-w-full '
-				/>
-				<Input
 					placeholder='Filter ibora...'
-					value={searchPhrase} // Input qiymatini `searchPhrase` bilan bog'lash
-					onChange={event => setSearchPhrase(event.target.value)}
+					value={phrase} // Input qiymatini `phrase` bilan bog'lash
+					onChange={event => setPhrase(event.target.value)}
 					className='max-w-full '
 				/>
 				<DropdownMenu>
