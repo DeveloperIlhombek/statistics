@@ -4,7 +4,7 @@ import { Separator } from '@/components/ui/separator'
 import { IboraTable } from './_components/ibora.table'
 import { OverallData } from '@/components/shared/overall-data'
 import { DataArticle } from '@/components/charts/data-article'
-
+import { FcStatistics } from 'react-icons/fc'
 function HomePage() {
 	return (
 		<div>
@@ -16,9 +16,12 @@ function HomePage() {
 			<Separator className='dark:bg-gray-500 my-12' />
 
 			<IboraTable />
-			<h1 className='text-5xl text-blue-500 my-4 text-center font-bold'>
-				Statistikalar
-			</h1>
+			<div className='flex justify-center items-center gap-4'>
+				<FcStatistics className='text-6xl' />
+				<h1 className='text-5xl text-blue-500 my-4 text-center font-bold'>
+					Statistikalar
+				</h1>
+			</div>
 			<div className='grid mb-24'>
 				<div className=' max-sm:col-span-4'>
 					<DataArticle />

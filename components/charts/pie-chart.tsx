@@ -1,94 +1,119 @@
 'use client'
 
-import { TrendingUp } from 'lucide-react'
 import { LabelList, Pie, PieChart } from 'recharts'
+import { FiPieChart } from 'react-icons/fi'
+import { BsCalendarDate } from 'react-icons/bs'
 
 import {
 	Card,
 	CardContent,
 	CardDescription,
-	CardFooter,
 	CardHeader,
 	CardTitle,
 } from '@/components/ui/card'
 import {
-	ChartConfig,
 	ChartContainer,
 	ChartTooltip,
 	ChartTooltipContent,
 } from '@/components/ui/chart'
-const chartData = [
-	{ browser: 'chrome', visitors: 275, fill: 'var(--color-chrome)' },
-	{ browser: 'safari', visitors: 200, fill: 'var(--color-safari)' },
-	{ browser: 'firefox', visitors: 187, fill: 'var(--color-firefox)' },
-	{ browser: 'edge', visitors: 173, fill: 'var(--color-edge)' },
-	{ browser: 'other', visitors: 90, fill: 'var(--color-other)' },
+import { ArticleType } from '@/app.type'
+import React from 'react'
+import { sourceOfsites } from '@/constants'
+import { cn } from '@/lib/utils'
+
+const sourceColors = [
+	'hsl(var(--chart-1))',
+	'hsl(var(--chart-2))',
+	'hsl(var(--chart-3))',
+	'hsl(var(--chart-4))',
 ]
 
-const chartConfig = {
-	visitors: {
-		label: 'Visitors',
-	},
-	chrome: {
-		label: 'Chrome',
-		color: 'hsl(var(--chart-1))',
-	},
-	safari: {
-		label: 'Safari',
-		color: 'hsl(var(--chart-2))',
-	},
-	firefox: {
-		label: 'Firefox',
-		color: 'hsl(var(--chart-3))',
-	},
-	edge: {
-		label: 'Edge',
-		color: 'hsl(var(--chart-4))',
-	},
-	other: {
-		label: 'Other',
-		color: 'hsl(var(--chart-5))',
-	},
-} satisfies ChartConfig
+export const chartConfig = sourceOfsites.reduce((config, source, index) => {
+	config[source] = {
+		label: source,
+		color: sourceColors[index % sourceColors.length],
+	}
+	return config
+}, {} as Record<string, { label: string; color: string }>)
 
-export function Component() {
+interface FilteredArticleListProps {
+	articles: ArticleType[]
+}
+
+export function PieChartComponent({ articles }: FilteredArticleListProps) {
+	// Source counts for the articles
+	const sourceCounts = articles.reduce((acc, article) => {
+		acc[article.source] = (acc[article.source] || 0) + 1
+		return acc
+	}, {} as Record<string, number>)
+
+	// Creating chart data
+	const chartData = Object.entries(sourceCounts).map(([source, count]) => ({
+		site: source,
+		visitors: count,
+		fill: chartConfig[source as keyof typeof chartConfig]?.color || '#ccc',
+	}))
+
 	return (
-		<Card className='flex flex-col'>
-			<CardHeader className='items-center pb-0'>
-				<CardTitle>Pie Chart - Label List</CardTitle>
-				<CardDescription>2020 - {new Date().getFullYear()}</CardDescription>
-			</CardHeader>
-			<CardContent className='flex-1 pb-0'>
-				<ChartContainer
-					config={chartConfig}
-					className='mx-auto aspect-square max-h-[250px]'
-				>
-					<PieChart>
-						<ChartTooltip
-							content={<ChartTooltipContent nameKey='visitors' hideLabel />}
-						/>
-						<Pie data={chartData} dataKey='visitors'>
-							<LabelList
-								dataKey='browser'
-								className='fill-background'
-								stroke='none'
-								fontSize={12}
-								formatter={(value: keyof typeof chartConfig) =>
-									chartConfig[value]?.label
-								}
-							/>
-						</Pie>
-					</PieChart>
-				</ChartContainer>
-			</CardContent>
-			<CardFooter className='flex-col gap-2 text-sm'>
-				<div className='flex items-center gap-2 font-medium leading-none'>
-					Trending up by 5.2% this month <TrendingUp className='h-4 w-4' />
+		<Card className='flex flex-col h-[70vh] ring-1'>
+			<div className='grid grid-cols-4'>
+				<div className='col-span-1'>
+					<CardHeader className='items-center pb-0'>
+						<CardTitle>
+							<BsCalendarDate className='inline-block mr-2 text-3xl' />
+							2020 - {new Date().getFullYear()} y.
+						</CardTitle>
+						<CardDescription> kiritilgan ma&apos;lumotlar soni</CardDescription>
+					</CardHeader>
+					<CardContent className='flex-1 pb-0 mt-6'>
+						<ul className='flex flex-col gap-6 items-start  '>
+							{chartData.map(data => (
+								<li
+									key={data.site}
+									className='flex justify-center items-center gap-4'
+								>
+									<h1 className='text-yellow-500 font-bold capitalize'>
+										{data.site}da{' '}
+									</h1>
+									<span className='text-2xl'>{data.visitors} </span> ta post
+								</li>
+							))}
+						</ul>
+					</CardContent>
 				</div>
-				<div className='leading-none text-muted-foreground'>
-					Showing total visitors for the last 6 months
+				<div className='col-span-3'>
+					<CardHeader className='items-center pb-0'>
+						<div className='flex justify-center items-center gap-4'>
+							<FiPieChart className='text-5xl' />
+							<CardTitle className='text-5xl'>Diagramma</CardTitle>
+						</div>
+						<CardDescription>2020 - {new Date().getFullYear()}</CardDescription>
+					</CardHeader>
+					<CardContent className='flex-1 pb-0'>
+						<ChartContainer
+							config={chartConfig}
+							className='mx-auto aspect-square max-h-[60vh]'
+						>
+							<PieChart>
+								<ChartTooltip
+									content={<ChartTooltipContent nameKey='visitors' hideLabel />}
+								/>
+								<Pie data={chartData} dataKey='visitors' nameKey='site'>
+									<LabelList
+										dataKey='site'
+										className='fill-background'
+										stroke='none'
+										fontSize={14}
+										formatter={(value: keyof typeof chartConfig) =>
+											chartConfig[value]?.label
+										}
+									/>
+								</Pie>
+							</PieChart>
+						</ChartContainer>
+					</CardContent>
 				</div>
-			</CardFooter>
+			</div>
 		</Card>
 	)
 }

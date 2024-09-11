@@ -41,6 +41,9 @@ import { getArticle } from '@/actions/maqola.action'
 import { ScrollArea } from '../ui/scroll-area'
 import { ArticleType } from '@/app.type'
 import { IArticles } from '@/type'
+import { PieChartComponent } from './pie-chart'
+import Image from 'next/image'
+import { BsTicketDetailed } from 'react-icons/bs'
 
 export const columns: ColumnDef<ArticleType>[] = [
 	{
@@ -228,7 +231,7 @@ export function DataArticle() {
 				<DropdownMenu>
 					<DropdownMenuTrigger asChild>
 						<Button variant='outline' className='ml-auto'>
-							Columns <ChevronDownIcon className='ml-2 h-4 w-4' />
+							Ustunlar <ChevronDownIcon className='ml-2 h-4 w-4' />
 						</Button>
 					</DropdownMenuTrigger>
 					<DropdownMenuContent align='end'>
@@ -251,7 +254,7 @@ export function DataArticle() {
 				</DropdownMenu>
 			</div>
 			<div className='rounded-md border '>
-				<ScrollArea className='h-48'>
+				<ScrollArea className='h-40'>
 					<Table>
 						<TableHeader>
 							{table.getHeaderGroups().map(headerGroup => (
@@ -294,13 +297,35 @@ export function DataArticle() {
 										colSpan={columns.length}
 										className='h-24 text-center'
 									>
-										No results.
+										Natijalar yo&apos;q
 									</TableCell>
 								</TableRow>
 							)}
 						</TableBody>
 					</Table>
 				</ScrollArea>
+			</div>
+
+			<div className='grid grid-cols-5 border rounded-md mt-4'>
+				<div className='col-span-4'>
+					<PieChartComponent articles={filteredArticles} />
+				</div>
+				<div className='flex flex-col'>
+					<h2 className='text-wrap p-6 font-bold text-xl'>
+						<BsTicketDetailed className='inline-block text-5xl mr-2 ' />
+						Web-saytlarda qatnashgan qismini batafsil ko&apos;rish
+					</h2>
+					<Image
+						src={'/assets/detailed.svg'}
+						alt='detailed article'
+						width={400}
+						height={400}
+						objectFit='cover'
+					/>
+					<Button className='w-fit m-auto relative inline-flex items-center justify-center px-8 py-4 text-lg font-bold text-white transition-all duration-200 bg-green-500 font-pj rounded-xl focus:outline-none focus:ring-2 focus:ring-offset-2  focus:ring-gray-500'>
+						Ma&apos;lumotni ko&apos;rish
+					</Button>
+				</div>
 			</div>
 		</div>
 	)
