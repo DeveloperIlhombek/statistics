@@ -38,9 +38,8 @@ import {
 	TableRow,
 } from '@/components/ui/table'
 import { getArticle } from '@/actions/maqola.action'
-import { getPhrase } from '@/actions/ibora.action'
 import { ScrollArea } from '../ui/scroll-area'
-import { ArticleType, PhraseType } from '@/app.type'
+import { ArticleType } from '@/app.type'
 import { IArticles } from '@/type'
 
 export const columns: ColumnDef<ArticleType>[] = [
@@ -147,10 +146,7 @@ export function DataArticle() {
 	const [filteredArticles, setFilteredArticles] = React.useState<IArticles[]>(
 		[]
 	)
-
-	// Helper function to extract first three letters of each word in an array
-	const getFirstThreeLetters = (words: string[]) =>
-		words.map(word => word.slice(0, 3))
+	const [filterMaqol, setFilterMaqol] = React.useState<string>('') // Ikkinchi filter uchun
 
 	// Fetch articles and phrases on component mount
 	React.useEffect(() => {
@@ -186,7 +182,14 @@ export function DataArticle() {
 
 		setFilteredArticles(matchingArticles)
 	}, [phrase, data])
-	console.log(filteredArticles)
+	// Filter by second input (filterPhrase)
+	React.useEffect(() => {
+		const matchingArticles = data.filter(article => {
+			return article.article.toLowerCase().includes(filterMaqol.toLowerCase())
+		})
+
+		setFilteredArticles(matchingArticles)
+	}, [filterMaqol, data])
 
 	const table = useReactTable({
 		data: filteredArticles,
@@ -211,10 +214,16 @@ export function DataArticle() {
 		<div className='w-full'>
 			<div className='mx-2 flex items-center py-4 gap-4'>
 				<Input
-					placeholder='Filter ibora...'
+					placeholder='Ibora izlash...'
 					value={phrase} // Input qiymatini `phrase` bilan bog'lash
 					onChange={event => setPhrase(event.target.value)}
-					className='max-w-full '
+					className='max-w-full ring-2'
+				/>
+				<Input
+					placeholder='Maqol izlash...'
+					value={filterMaqol}
+					onChange={event => setFilterMaqol(event.target.value)}
+					className='max-w-full ring-2'
 				/>
 				<DropdownMenu>
 					<DropdownMenuTrigger asChild>
