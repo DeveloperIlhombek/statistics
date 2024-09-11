@@ -37,6 +37,7 @@ import {
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { getPhrase } from '@/actions/ibora.action'
 import { PhraseType } from '@/app.type'
+import { AiOutlineFileSearch } from 'react-icons/ai'
 
 export const columns: ColumnDef<PhraseType>[] = [
 	{
@@ -151,9 +152,13 @@ export function IboraTable() {
 
 	return (
 		<div className='flex flex-col items-center justify-center '>
-			<h1 className='text-5xl text-blue-500 my-4 text-center font-bold'>
-				Iboralarni ta&apos;riflar orqali izlash
+			<h1 className='text-5xl text-blue-500 my-4 text-center font-bold tracking-widest'>
+				<AiOutlineFileSearch className='inline-block mr-8 text-yellow-500' />
+				Iboralar
 			</h1>
+			<h2 className='font-bold tracking-widest'>
+				Bo&apos;shliqqa kiritilgan ta&apos;riflar orqali iboralarni izlang
+			</h2>
 			<div className='w-full'>
 				<div className='flex items-center py-4'>
 					<Input

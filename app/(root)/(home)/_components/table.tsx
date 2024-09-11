@@ -37,6 +37,7 @@ import {
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { getProverb } from '@/actions/maqol.action'
 import { ProverbType } from '@/app.type'
+import { PiArticleMediumLight } from 'react-icons/pi'
 
 export const columns: ColumnDef<ProverbType>[] = [
 	{
@@ -134,9 +135,16 @@ export function DataTableDemo() {
 
 	return (
 		<div className='w-full'>
-			<div className='text-5xl text-blue-500 my-4 text-center font-bold'>
-				Foydalanilgan maqollarni qidirish{' '}
+			<div className=''>
+				<h1 className='text-5xl text-blue-500 my-4 text-center font-bold tracking-widest'>
+					<PiArticleMediumLight className='inline-block mr-4 text-yellow-500' />
+					Maqollar
+				</h1>
+				<h2 className='text-center tracking-widest'>
+					Foydalanilgan maqollarni qiridish va ulardan nusxalash
+				</h2>
 			</div>
+
 			<div className='flex items-center py-4'>
 				<Input
 					placeholder='Maqollarni izlash ...'
