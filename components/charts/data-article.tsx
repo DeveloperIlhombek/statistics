@@ -37,6 +37,7 @@ import {
 	TableHeader,
 	TableRow,
 } from '@/components/ui/table'
+import { BsFillClipboardDataFill } from 'react-icons/bs'
 import { getArticle } from '@/actions/maqola.action'
 import { ScrollArea } from '../ui/scroll-area'
 import { ArticleType } from '@/app.type'
@@ -44,6 +45,14 @@ import { IArticles } from '@/type'
 import { PieChartComponent } from './pie-chart'
 import Image from 'next/image'
 import { BsTicketDetailed } from 'react-icons/bs'
+import {
+	Dialog,
+	DialogContent,
+	DialogDescription,
+	DialogHeader,
+	DialogTitle,
+	DialogTrigger,
+} from '@/components/ui/dialog'
 
 export const columns: ColumnDef<ArticleType>[] = [
 	{
@@ -150,7 +159,7 @@ export function DataArticle() {
 		[]
 	)
 	const [filterMaqol, setFilterMaqol] = React.useState<string>('') // Ikkinchi filter uchun
-
+	const [open, setOpen] = React.useState(false)
 	// Fetch articles and phrases on component mount
 	React.useEffect(() => {
 		async function fetchArticleAndPhrase() {
@@ -322,11 +331,58 @@ export function DataArticle() {
 						height={400}
 						objectFit='cover'
 					/>
-					<Button className='w-fit m-auto relative inline-flex items-center justify-center px-8 py-4 text-lg font-bold text-white transition-all duration-200 bg-green-500 font-pj rounded-xl focus:outline-none focus:ring-2 focus:ring-offset-2  focus:ring-gray-500'>
-						Ma&apos;lumotni ko&apos;rish
+					<Button
+						className='w-fit m-auto relative inline-flex items-center justify-center px-8 py-4 text-lg font-bold text-white transition-all duration-200 bg-green-500 font-pj rounded-xl focus:outline-none focus:ring-2 focus:ring-offset-2  focus:ring-gray-500'
+						type='button'
+						variant={'outline'}
+						onClick={() => setOpen(true)}
+					>
+						<span>Ma&apos;lumotni ko&apos;rish</span>
+						<BsFillClipboardDataFill className='ml-1' />
 					</Button>
 				</div>
 			</div>
+			{filteredArticles.length == 0 ? (
+				<Dialog open={open} onOpenChange={setOpen}>
+					<DialogContent>
+						<DialogHeader>
+							<DialogTitle className='text-red-500'>
+								Mos keluvchi postlar topilmadi !!!
+							</DialogTitle>
+						</DialogHeader>
+						<Image
+							src={'/notfounded.avif'}
+							alt='not founded'
+							width={400}
+							height={400}
+						/>
+					</DialogContent>
+				</Dialog>
+			) : (
+				<Dialog open={open} onOpenChange={setOpen}>
+					<DialogContent className='w-[80%]'>
+						<DialogHeader>
+							<DialogTitle>
+								Kiritgan so&apos;rovingizga mos barcha postlar
+							</DialogTitle>
+						</DialogHeader>
+						<div className='relative w-full h-[60vh]'>
+							<ScrollArea className='h-[60vh]'>
+								<ul>
+									{filteredArticles.map(item => (
+										<li key={item._id}>
+											<span className='bg-green-500 text-2xl'>
+												{item.source}
+											</span>
+											<h3>{item.article}</h3>
+										</li>
+									))}
+								</ul>
+							</ScrollArea>
+						</div>
+					</DialogContent>
+				</Dialog>
+			)}
 		</div>
 	)
 }
