@@ -5,9 +5,12 @@ import { IboraTable } from './_components/ibora.table'
 import { OverallData } from '@/components/shared/overall-data'
 import { DataArticle } from '@/components/charts/data-article'
 import { FcStatistics } from 'react-icons/fc'
+import { MultiLineChart } from '@/components/charts/multiline-chart'
+import Navbar from './_components/navbar'
 function HomePage() {
 	return (
 		<div>
+			<Navbar />
 			<Hero />
 			<Separator className='dark:bg-gray-500 my-12' />
 			<OverallData />
@@ -27,14 +30,18 @@ function HomePage() {
 					<DataArticle />
 				</div>
 			</div>
-			<h1>
-				Lorem ipsum dolor sit amet consectetur adipisicing elit. Earum
-				cupiditate quibusdam ea omnis veritatis blanditiis, deserunt totam nobis
-				asperiores error? Harum dolore recusandae architecto. Similique
-				voluptatibus fuga dolores dolore pariatur harum, mollitia ea enim
-				dolorem, et nesciunt. Aspernatur non quisquam quod vero et quaerat illum
-				nam beatae, deleniti placeat nobis! Commodi fugiat eos similique, nobis
-			</h1>
+			<div className='grid grid-cols-7 gap-4'>
+				<div className='border w-[400] col-span-2 h-[400] ring-2 rounded-md grid grid-flow-row grid-rows-7'>
+					<h1 className='row-span-2 text-center text-3xl text-blue-400 my-4'>
+						Diagramma title
+					</h1>
+					<p className='text-center row-span-3'>Diagramma uchun tarif</p>
+					<div className='row-span-2 border ring-1'>Sayt nomlari</div>
+				</div>
+				<div className='col-span-5'>
+					<MultiLineChart />
+				</div>
+			</div>
 		</div>
 	)
 }

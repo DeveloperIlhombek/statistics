@@ -3,17 +3,36 @@ import { ModeToggle } from '@/components/shared/mood'
 import { navLink } from '@/constants'
 import { Search } from 'lucide-react'
 import Link from 'next/link'
-import { SignInButton, SignUpButton, SignedIn, SignedOut } from '@clerk/nextjs'
+import dynamic from 'next/dynamic'
 import { Button } from '@/components/ui/button'
 import UserBox from '@/components/shared/userbox'
 import Logo from '@/components/shared/logo'
 import { usePathname } from 'next/navigation'
 import { cn } from '@/lib/utils'
+
+// Dynamically import Clerk components
+const SignedIn = dynamic(
+	() => import('@clerk/nextjs').then(mod => mod.SignedIn),
+	{ ssr: false }
+)
+const SignedOut = dynamic(
+	() => import('@clerk/nextjs').then(mod => mod.SignedOut),
+	{ ssr: false }
+)
+const SignInButton = dynamic(
+	() => import('@clerk/nextjs').then(mod => mod.SignInButton),
+	{ ssr: false }
+)
+const SignUpButton = dynamic(
+	() => import('@clerk/nextjs').then(mod => mod.SignUpButton),
+	{ ssr: false }
+)
+
 function Navbar() {
 	const pathname = usePathname()
 
 	return (
-		<div className='h-[10vh] backdrop-blur-sm border-b fixed z-40 inset-0 bg-background'>
+		<div className='h-[10vh] backdrop-blur-3xl border-b z-40 inset-0 bg-background'>
 			<div className='container mx-auto h-[10vh] w-full flex items-center justify-between'>
 				<div className='flex justify-center items-center gap-6'>
 					{/* Logo */}
