@@ -19,13 +19,13 @@ import {
 import { ArticleType } from '@/app.type'
 import React from 'react'
 import { sourceOfsites } from '@/constants'
-import { cn } from '@/lib/utils'
 
 const sourceColors = [
 	'hsl(var(--chart-1))',
 	'hsl(var(--chart-2))',
 	'hsl(var(--chart-3))',
 	'hsl(var(--chart-4))',
+	'hsl(var(--chart-5))',
 ]
 
 export const chartConfig = sourceOfsites.reduce((config, source, index) => {

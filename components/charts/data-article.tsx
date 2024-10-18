@@ -48,10 +48,8 @@ import { BsTicketDetailed } from 'react-icons/bs'
 import {
 	Dialog,
 	DialogContent,
-	DialogDescription,
 	DialogHeader,
 	DialogTitle,
-	DialogTrigger,
 } from '@/components/ui/dialog'
 
 export const columns: ColumnDef<ArticleType>[] = [

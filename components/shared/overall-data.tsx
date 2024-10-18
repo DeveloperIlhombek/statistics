@@ -68,6 +68,7 @@ export function OverallData() {
 					getProverb(),
 					getPhrase(),
 				])
+
 				setArticles(articleData?.length)
 				setProverbs(proverbData?.length)
 				setPhrases(phraseData?.length)

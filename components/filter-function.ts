@@ -34,7 +34,6 @@ const FilterInput = (data: ArticleType[], phrase: PhraseType[]) => {
 				matchingArticle =>
 					data[processedArticles.indexOf(matchingArticle)].article
 			)
-		console.log(matchingArticles)
 
 		setFilterValue(matchingArticles)
 	}, [processedArticles, processedPhrases, data])

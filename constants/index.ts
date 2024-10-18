@@ -44,16 +44,25 @@ export const instructorNavLinks = [
 export const listOfsite = [
 	{ label: 'UzA', image: '/assets/site/uza.png', url: 'https://uza.uz' },
 	{
-		label: 'Marifat',
-		image: '/assets/site/marifat.png',
-		url: 'http://marifat.uz/',
+		label: 'edu.uz',
+		image: '/assets/site/edu.png',
+		url: 'https://edu.uz/uz#gsc.tab=0',
 	},
-	{ label: 'Kun uz', image: '/assets/site/kunuz.jpg', url: 'https://kun.uz/' },
+	{
+		label: 'natlib.uz',
+		image: '/assets/site/natlib.png',
+		url: 'https://www.natlib.uz/',
+	},
 
 	{
-		label: 'Fanlar',
-		image: '/assets/site/fanlaracademiyasi.png',
-		url: 'https://www.academy.uz/',
+		label: 'edu.profedu.uz',
+		image: '/assets/site/proedu.svg',
+		url: 'https://edu.profedu.uz/',
+	},
+	{
+		label: 'ziyouz.uz',
+		image: '/assets/site/ziyouz.png',
+		url: 'https://ziyouz.uz/yangiliklar/',
 	},
 ]
 
@@ -63,4 +72,10 @@ export const dataOfChart = [
 	{ label: 'Maqollar soni', count: '250' },
 ]
 
-export const sourceOfsites = ['kun.uz', 'UzA', "Ma'rifat", 'Fanlar academiyasi']
+export const sourceOfsites = [
+	'edu.uz',
+	'UzA',
+	'natlib',
+	'edu.profedu.uz',
+	'ziyouz.uz',
+]
