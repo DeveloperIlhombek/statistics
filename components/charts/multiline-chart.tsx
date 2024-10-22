@@ -1,8 +1,5 @@
 'use client'
-
-import { TrendingUp } from 'lucide-react'
 import { CartesianGrid, Line, LineChart, XAxis } from 'recharts'
-
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import {
 	ChartConfig,
@@ -10,30 +7,100 @@ import {
 	ChartTooltip,
 	ChartTooltipContent,
 } from '@/components/ui/chart'
+import { useEffect, useState } from 'react'
+import { getArticle } from '@/actions/maqola.action'
+import { IArticles } from '@/type'
+import { formatDateToMonthYear } from '@/lib/utils'
 
 export const description = 'A multiple line chart'
 
-const chartData = [
-	{ month: 'January', desktop: 18, mobile: 8 },
-	{ month: 'February', desktop: 30, mobile: 20 },
-	{ month: 'March', desktop: 2, mobile: 12 },
-	{ month: 'April', desktop: 7, mobile: 19 },
-	{ month: 'May', desktop: 29, mobile: 3 },
-	{ month: 'June', desktop: 14, mobile: 10 },
-]
-
+// chartConfig ni e'lon qilish
 const chartConfig = {
-	desktop: {
-		label: 'Desktop',
+	uzA: {
+		label: 'UzA',
 		color: 'hsl(var(--chart-1))',
 	},
-	mobile: {
-		label: 'Mobile',
+	eduuz: {
+		label: 'edu.uz',
 		color: 'hsl(var(--chart-2))',
+	},
+	eduprofedu: {
+		label: 'eduprofedu',
+		color: 'hsl(var(--chart-3))',
+	},
+	ziyouz: {
+		label: 'ziyouz',
+		color: 'hsl(var(--chart-4))',
+	},
+	natlib: {
+		label: 'natlib',
+		color: 'hsl(var(--chart-5))',
 	},
 } satisfies ChartConfig
 
+function groupByMonthYear(articles: IArticles[]) {
+	const groupedData: { [key: string]: any } = {}
+
+	articles.forEach(article => {
+		const monthYear = formatDateToMonthYear(article.dataOfCreate)
+		const source = article.source
+
+		if (!groupedData[monthYear]) {
+			groupedData[monthYear] = {
+				month: monthYear,
+				uzA: 0,
+				eduuz: 0,
+				eduprofedu: 0,
+				ziyouz: 0,
+				natlib: 0,
+			}
+		}
+
+		if (source === 'UzA') {
+			groupedData[monthYear].uzA += 1
+		} else if (source === 'edu.uz') {
+			groupedData[monthYear].eduuz += 1
+		} else if (source === 'edu.profedu.uz') {
+			groupedData[monthYear].eduprofedu += 1
+		} else if (source === 'ziyouz.uz') {
+			groupedData[monthYear].ziyouz += 1
+		} else if (source === 'natlib') {
+			groupedData[monthYear].natlib += 1
+		}
+	})
+
+	const sortedData = Object.values(groupedData).sort((a: any, b: any) => {
+		const dateA = new Date(a.month)
+		const dateB = new Date(b.month)
+
+		return dateA.getTime() - dateB.getTime()
+	})
+
+	return sortedData
+}
+
 export function MultiLineChart() {
+	const [articles, setArticles] = useState<IArticles[]>([])
+	const [chartData, setChartData] = useState<any[]>([])
+	const [loading, setLoading] = useState(true)
+
+	useEffect(() => {
+		const fetchArticles = async () => {
+			try {
+				const data = await getArticle()
+				setArticles(data || [])
+				const groupedData = groupByMonthYear(data || [])
+				setChartData(groupedData)
+			} catch (error) {
+				console.error('Error fetching articles:', error)
+			} finally {
+				setLoading(false)
+			}
+		}
+
+		fetchArticles()
+	}, [])
+
 	return (
 		<Card className='max-w-5xl ring-2'>
 			<CardHeader>
@@ -58,16 +125,37 @@ export function MultiLineChart() {
 						/>
 						<ChartTooltip cursor={false} content={<ChartTooltipContent />} />
 						<Line
-							dataKey='desktop'
+							dataKey='uzA'
 							type='monotone'
-							stroke='var(--color-desktop)'
+							stroke='var(--color-uzA)'
 							strokeWidth={2}
 							dot={false}
 						/>
 						<Line
-							dataKey='mobile'
+							dataKey='eduuz'
 							type='monotone'
-							stroke='var(--color-mobile)'
+							stroke='var(--color-eduuz)'
+							strokeWidth={2}
+							dot={false}
+						/>
+						<Line
+							dataKey='eduprofedu'
+							type='monotone'
+							stroke='var(--color-eduprofedu)'
+							strokeWidth={2}
+							dot={false}
+						/>
+						<Line
+							dataKey='ziyouz'
+							type='monotone'
+							stroke='var(--color-ziyouz)'
+							strokeWidth={2}
+							dot={false}
+						/>
+						<Line
+							dataKey='natlib'
+							type='monotone'
+							stroke='var(--color-natlib)'
 							strokeWidth={2}
 							dot={false}
 						/>
