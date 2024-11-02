@@ -4,7 +4,6 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { Textarea } from '@/components/ui/textarea'
-
 import {
 	Form,
 	FormControl,
@@ -40,6 +39,8 @@ function ArticleFiedsForm() {
 		resolver: zodResolver(articleSchema),
 		defaultValues: defaultVal,
 	})
+
+	const sourceValue = form.watch('source') // `source` qiymatini kuzatamiz
 
 	function onSubmit(values: z.infer<typeof articleSchema>) {
 		setIsLoading(true)
@@ -100,6 +101,7 @@ function ArticleFiedsForm() {
 							</FormItem>
 						)}
 					/>
+
 					<div className='grid grid-cols-2 gap-4'>
 						<FormField
 							control={form.control}
@@ -111,8 +113,8 @@ function ArticleFiedsForm() {
 									</FormLabel>
 									<FormControl>
 										<Select
-											defaultValue={field.value}
-											onValueChange={field.onChange}
+											value={sourceValue} // watch orqali qiymatni o'zgartiramiz
+											onValueChange={value => form.setValue('source', value)} // setValue orqali qiymatni formga o'rnatamiz
 										>
 											<SelectTrigger className='w-full bg-secondary'>
 												<SelectValue placeholder='Web-sahifalar' />
@@ -130,6 +132,7 @@ function ArticleFiedsForm() {
 											</SelectContent>
 										</Select>
 									</FormControl>
+									<FormMessage />
 								</FormItem>
 							)}
 						/>
@@ -140,7 +143,7 @@ function ArticleFiedsForm() {
 							type='button'
 							size={'lg'}
 							variant={'destructive'}
-							onClick={() => form.reset()}
+							onClick={() => form.reset()} // `reset` chaqirilganda `Select` qiymatlari ham yangilanadi
 							disabled={isLoading}
 						>
 							Tozalash
