@@ -1,6 +1,6 @@
 'use client'
 
-import * as React from 'react'
+import { useEffect, useState } from 'react'
 import {
 	CaretSortIcon,
 	ChevronDownIcon,
@@ -144,28 +144,21 @@ export const columns: ColumnDef<ArticleType>[] = [
 ]
 
 export function DataArticle() {
-	const [sorting, setSorting] = React.useState<SortingState>([])
-	const [data, setData] = React.useState<ArticleType[]>([])
-	const [phrase, setPhrase] = React.useState<string>('')
-	const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-		[]
-	)
-	const [columnVisibility, setColumnVisibility] =
-		React.useState<VisibilityState>({})
-	const [rowSelection, setRowSelection] = React.useState({})
-	const [filteredArticles, setFilteredArticles] = React.useState<IArticles[]>(
-		[]
-	)
-	const [filterMaqol, setFilterMaqol] = React.useState<string>('') // Ikkinchi filter uchun
-	const [open, setOpen] = React.useState(false)
+	const [sorting, setSorting] = useState<SortingState>([])
+	const [data, setData] = useState<ArticleType[]>([])
+	const [phrase, setPhrase] = useState<string>('')
+	const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
+	const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
+	const [rowSelection, setRowSelection] = useState({})
+	const [filteredArticles, setFilteredArticles] = useState<IArticles[]>([])
+	const [filterMaqol, setFilterMaqol] = useState<string>('')
+	const [open, setOpen] = useState(false)
 	// Fetch articles and phrases on component mount
-	React.useEffect(() => {
+	useEffect(() => {
 		async function fetchArticleAndPhrase() {
 			try {
 				const articles = await getArticle()
-				// const phrases = await getPhrase()
 				setData(articles || [])
-				// setPhrase(phrases)
 			} catch (error) {
 				throw new Error('Something went wrong when fetch articles')
 			}
@@ -173,27 +166,40 @@ export function DataArticle() {
 		fetchArticleAndPhrase()
 	}, [])
 
-	// Filter by input phrase (searchPhrase)
-	React.useEffect(() => {
+	useEffect(() => {
 		const matchingArticles = data.filter(article => {
-			// Phrase va maqoladagi so'zlarni boshidagi 3 harf bilan taqqoslash
+			// Maqola so‘zlarini boshlang‘ich uch harflarini olish
 			const articleWords = article.article
 				.split(' ')
-				.map(word => word.slice(0, 3))
-			const phraseWords = phrase.split(' ').map(word => word.slice(0, 3))
+				.map(word => word.slice(0, 3).toLowerCase())
 
-			// Agar maqoladagi so'zlarning boshidagi 3 harf phrase bilan mos kelsa, maqolani qabul qiladi
-			return phraseWords.every(phraseWord =>
-				articleWords.some(articleWord =>
-					articleWord.toLowerCase().includes(phraseWord.toLowerCase())
-				)
-			)
+			// Iborani so‘zlarini uch harfdan qisqartirish
+			const phraseWords = phrase
+				.split(' ')
+				.map(word => word.slice(0, 3).toLowerCase())
+
+			// Iboradagi qisqartirilgan so‘zlarning maqola ichida ketma-ketlikda mavjudligini tekshirish
+			let isMatch = false
+			for (let i = 0; i <= articleWords.length - phraseWords.length; i++) {
+				// Maqola ichida ketma-ket keladigan qismni olamiz
+				const segment = articleWords.slice(i, i + phraseWords.length)
+
+				// Agar ketma-ketlik ibora bilan aynan mos kelsa, moslik topildi deb belgilaymiz
+				if (segment.join(' ') === phraseWords.join(' ')) {
+					isMatch = true
+					break
+				}
+			}
+
+			return isMatch
 		})
 
+		// Mos keladigan maqolalarni `filteredArticles` ga o‘rnatamiz
 		setFilteredArticles(matchingArticles)
 	}, [phrase, data])
+
 	// Filter by second input (filterPhrase)
-	React.useEffect(() => {
+	useEffect(() => {
 		const matchingArticles = data.filter(article => {
 			return article.article.toLowerCase().includes(filterMaqol.toLowerCase())
 		})

@@ -3,7 +3,6 @@
 import { connectToDatabase } from '@/lib/mongoose'
 import { IArticle } from './types'
 import Maqola from '@/database/maqola.model'
-import { IArticles } from '@/type'
 
 export const createArticle = async (data: IArticle) => {
 	try {

@@ -6,11 +6,9 @@ import { OverallData } from '@/components/shared/overall-data'
 import { DataArticle } from '@/components/charts/data-article'
 import { FcStatistics } from 'react-icons/fc'
 import { MultiLineChart } from '@/components/charts/multiline-chart'
-import Navbar from './_components/navbar'
 function HomePage() {
 	return (
 		<div>
-			<Navbar />
 			<Hero />
 			<Separator className='dark:bg-gray-500 my-12' />
 			<OverallData />
