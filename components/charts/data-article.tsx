@@ -171,12 +171,12 @@ export function DataArticle() {
 			// Maqola so‘zlarini boshlang‘ich uch harflarini olish
 			const articleWords = article.article
 				.split(' ')
-				.map(word => word.slice(0, 4).toLowerCase())
+				.map(word => word.slice(0, 3).toLowerCase())
 
 			// Iborani so‘zlarini uch harfdan qisqartirish
 			const phraseWords = phrase
 				.split(' ')
-				.map(word => word.slice(0, 4).toLowerCase())
+				.map(word => word.slice(0, 3).toLowerCase())
 
 			// Iboradagi qisqartirilgan so‘zlarning maqola ichida ketma-ketlikda mavjudligini tekshirish
 			let isMatch = false
