@@ -41,8 +41,8 @@ const DataCards: React.FC<DataCardProps> = ({ title, count }) => {
 	}, [count])
 
 	return (
-		<div className='border-2 border-slate-400 border-solid ring-2 rounded-md flex flex-wrap flex-col'>
-			<h2 className='text-center font-bold p-2 text-2xl tracking-widest'>
+		<div className='border-2 w-full border-slate-400 border-solid ring-2 rounded-3xl flex flex-wrap flex-col'>
+			<h2 className='text-center p-2 text-2xl tracking-widest text-blue-500 font-serif font-bold'>
 				{title}
 			</h2>
 			<div className='flex items-center justify-center gap-1'>
@@ -81,7 +81,7 @@ export function OverallData() {
 	}, [])
 
 	return (
-		<Card className='max-sm:col-span-4'>
+		<Card className='max-sm:col-span-4 group relative flex h-[300px] w-full cursor-pointer flex-col items-center justify-between overflow-hidden rounded-2xl border border-blue-500 bg-sky-100 text-center text-black shadow-inner shadow-gray-50  ring-2 group-hover:duration-500 dark:bg-slate-900 dark:text-white dark:ring-0'>
 			<CardHeader>
 				<CardTitle className='py-1 text-center text-5xl text-blue-500'>
 					<TiSortNumericallyOutline className='inline-block mr-8 text-4xl text-yellow-500' />
@@ -90,10 +90,16 @@ export function OverallData() {
 				<CardDescription>Maqola, ibora, maqollar soni </CardDescription>
 			</CardHeader>
 			<CardContent>
-				<div className='grid grid-cols-3 gap-8 '>
-					<DataCards title='Maqolalar' count={articles} />
-					<DataCards title='Iboralar' count={phrases} />
-					<DataCards title='Maqollar' count={proverbs} />
+				<div className='grid w-full grid-cols-3 gap-8 '>
+					<div className='col-span-1 w-96'>
+						<DataCards title='Maqolalar' count={articles} />
+					</div>
+					<div className='col-span-1 w-96'>
+						<DataCards title='Iboralar' count={phrases} />
+					</div>
+					<div className='col-span-1 w-96'>
+						<DataCards title='Maqollar' count={proverbs} />
+					</div>
 				</div>
 			</CardContent>
 		</Card>
