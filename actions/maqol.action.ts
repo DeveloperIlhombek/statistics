@@ -19,7 +19,7 @@ export const createProverb = async (data: IProverb) => {
 		}
 	}
 }
-
+//
 export const getProverb = async () => {
 	try {
 		await connectToDatabase()

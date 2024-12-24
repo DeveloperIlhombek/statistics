@@ -1,4 +1,3 @@
-import Hero from './_components/hero'
 import { DataTableDemo } from './_components/table'
 import { Separator } from '@/components/ui/separator'
 import { IboraTable } from './_components/ibora.table'
@@ -6,11 +5,11 @@ import { OverallData } from '@/components/shared/overall-data'
 import { DataArticle } from '@/components/charts/data-article'
 import { FcStatistics } from 'react-icons/fc'
 import { MultiLineChart } from '@/components/charts/multiline-chart'
+import Hero from './_components/hero/Hero'
 function HomePage() {
 	return (
 		<div>
 			<Hero />
-			<Separator className='dark:bg-gray-500 my-12' />
 			<OverallData />
 			<Separator className='dark:bg-gray-500 my-12' />
 			<DataTableDemo />

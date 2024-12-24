@@ -1,107 +1,52 @@
 'use client'
-
-import {
-	Card,
-	CardContent,
-	CardDescription,
-	CardHeader,
-	CardTitle,
-} from '@/components/ui/card'
-
-import { useEffect, useState } from 'react'
-import { getArticle } from '@/actions/maqola.action'
-import { getProverb } from '@/actions/maqol.action'
-import { getPhrase } from '@/actions/ibora.action'
-import { TiSortNumericallyOutline } from 'react-icons/ti'
-interface DataCardProps {
-	title: string
-	count: number | undefined
-}
-
-const DataCards: React.FC<DataCardProps> = ({ title, count }) => {
-	const [displayedCount, setDisplayedCount] = useState(0)
-
-	useEffect(() => {
-		if (count !== undefined) {
-			const duration = 3000
-			const increment = Math.ceil(count / (duration / 100))
-
-			let currentCount = 0
-			const counter = setInterval(() => {
-				currentCount += increment
-				if (currentCount >= count) {
-					currentCount = count
-					clearInterval(counter)
-				}
-				setDisplayedCount(currentCount)
-			}, 100)
-
-			return () => clearInterval(counter)
-		}
-	}, [count])
-
-	return (
-		<div className='border-2 w-full border-slate-400 border-solid ring-2 rounded-3xl flex flex-wrap flex-col'>
-			<h2 className='text-center p-2 text-2xl tracking-widest text-blue-500 font-serif font-bold'>
-				{title}
-			</h2>
-			<div className='flex items-center justify-center gap-1'>
-				<div className='text-center py-2 text-3xl  p-4'>
-					{count === undefined ? '-' : displayedCount}
-				</div>
-				<span className='text-3xl '>ta</span>
-			</div>
-		</div>
-	)
-}
+import { useRef } from 'react'
+import { motion } from 'framer-motion'
+import { Card } from '@/components/ui/card'
+import { DataCard } from './data-card'
+import { StatsHeader } from './stats-header'
+import { useStats } from '@/lib/hooks/use-stats'
+import { useIntersection } from '@/lib/hooks/use-intersection'
 
 export function OverallData() {
-	const [articles, setArticles] = useState<number | undefined>(undefined)
-	const [proverbs, setProverbs] = useState<number | undefined>(undefined)
-	const [phrases, setPhrases] = useState<number | undefined>(undefined)
+	const containerRef = useRef<HTMLDivElement>(null)
+	const isVisible = useIntersection(containerRef, { threshold: 0.2 })
+	const { stats, loading, error } = useStats()
 
-	useEffect(() => {
-		const fetchData = async () => {
-			try {
-				const [articleData, proverbData, phraseData] = await Promise.all([
-					getArticle(),
-					getProverb(),
-					getPhrase(),
-				])
-
-				setArticles(articleData?.length)
-				setProverbs(proverbData?.length)
-				setPhrases(phraseData?.length)
-			} catch (error) {
-				console.error('Error fetching data:', error)
-			}
-		}
-
-		fetchData()
-	}, [])
+	if (error) {
+		return <Card className='p-6 text-center text-red-500'>{error}</Card>
+	}
 
 	return (
-		<Card className='max-sm:col-span-4 group relative flex h-[300px] w-full cursor-pointer flex-col items-center justify-between overflow-hidden rounded-2xl border border-blue-500 bg-sky-100 text-center text-black shadow-inner shadow-gray-50  ring-2 group-hover:duration-500 dark:bg-slate-900 dark:text-white dark:ring-0'>
-			<CardHeader>
-				<CardTitle className='py-1 text-center text-5xl text-blue-500'>
-					<TiSortNumericallyOutline className='inline-block mr-8 text-4xl text-yellow-500' />
-					Barcha ma&apos;lumotlar :
-				</CardTitle>
-				<CardDescription>Maqola, ibora, maqollar soni </CardDescription>
-			</CardHeader>
-			<CardContent>
-				<div className='grid w-full grid-cols-3 gap-8 '>
-					<div className='col-span-1 w-96'>
-						<DataCards title='Maqolalar' count={articles} />
-					</div>
-					<div className='col-span-1 w-96'>
-						<DataCards title='Iboralar' count={phrases} />
-					</div>
-					<div className='col-span-1 w-96'>
-						<DataCards title='Maqollar' count={proverbs} />
-					</div>
+		<Card
+			ref={containerRef}
+			className='p-6 bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800 border-none shadow-xl'
+		>
+			<motion.div
+				initial={{ opacity: 0 }}
+				animate={{ opacity: isVisible ? 1 : 0 }}
+				transition={{ duration: 0.5 }}
+				className='space-y-8'
+			>
+				<StatsHeader isVisible={isVisible} />
+
+				<div className='grid grid-cols-1 md:grid-cols-3 gap-6'>
+					<DataCard
+						title='Maqolalar'
+						count={loading ? undefined : stats.articles}
+						delay={isVisible ? 0 : 0}
+					/>
+					<DataCard
+						title='Iboralar'
+						count={loading ? undefined : stats.phrases}
+						delay={isVisible ? 0.2 : 0}
+					/>
+					<DataCard
+						title='Maqollar'
+						count={loading ? undefined : stats.proverbs}
+						delay={isVisible ? 0.4 : 0}
+					/>
 				</div>
-			</CardContent>
+			</motion.div>
 		</Card>
 	)
 }
