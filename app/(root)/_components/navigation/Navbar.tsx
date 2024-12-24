@@ -8,7 +8,7 @@ import { MobileMenu } from '../navigation/MobileMenu'
 import { SearchButton } from './SearchButton'
 import Logo from '@/components/shared/logo'
 import { NavLinks } from './NavLinks'
-import { ThemeToggle } from '@/components/shared/mood'
+import { ModeToggle } from '@/components/shared/mood-toggle'
 import UserBox from '@/components/shared/userbox'
 import { AuthButtons } from './AuthButtons'
 
@@ -56,7 +56,7 @@ export default function Navbar() {
 						className='flex items-center gap-4'
 					>
 						<SearchButton />
-						<ThemeToggle />
+						<ModeToggle />
 
 						{/* Auth Buttons */}
 						<div className='hidden lg:block'>

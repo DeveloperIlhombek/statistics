@@ -1,5 +1,5 @@
 import Logo from '@/components/shared/logo'
-import { ModeToggle } from '@/components/shared/mood'
+import { ModeToggle } from '@/components/shared/mood-toggle'
 import UserBox from '@/components/shared/userbox'
 
 function Navbar() {

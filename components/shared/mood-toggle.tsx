@@ -6,7 +6,7 @@ import { useTheme } from 'next-themes'
 import { ThemeIcon } from '../ui/theme-icon'
 import { ThemeMenu } from '../ui/theme-menu'
 
-export function ThemeToggle() {
+export function ModeToggle() {
 	const { theme, setTheme } = useTheme()
 	const [isOpen, setIsOpen] = React.useState(false)
 
