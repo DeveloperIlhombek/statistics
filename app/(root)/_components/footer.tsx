@@ -1,85 +1,159 @@
 'use client'
 
-import Logo from '@/components/shared/logo'
-import { Separator } from '@/components/ui/separator'
-import { navLink } from '@/constants'
-import { Mail, MapPin, PhoneCall } from 'lucide-react'
+import React from 'react'
 import Link from 'next/link'
+import { motion } from 'framer-motion'
+import { Mail, MapPin, PhoneCall, ExternalLink } from 'lucide-react'
+import { Separator } from '@/components/ui/separator'
+import Logo from '@/components/shared/logo'
+import { navLink } from '@/constants'
 
-function Footer() {
+const Footer = () => {
+	const container = {
+		hidden: { opacity: 0 },
+		show: {
+			opacity: 1,
+			transition: {
+				staggerChildren: 0.1,
+			},
+		},
+	}
+
+	const item = {
+		hidden: { opacity: 0, y: 20 },
+		show: { opacity: 1, y: 0 },
+	}
+
 	return (
-		<div className='mt-12 bg-secondary pt-12 max-md:px-4'>
-			<div className='container mx-auto max-w-7xl pb-12'>
-				<div className='grid grid-cols-1 gap-12 md:grid-cols-4'>
-					<div className='flex flex-col space-y-3 md:col-span-2'>
-						<Logo />
-						<p>heroDescription</p>
-					</div>
+		<footer className='relative mt-12 overflow-hidden bg-gradient-to-b from-white to-gray-50 pt-12 dark:from-gray-900 dark:to-gray-800'>
+			{/* Background Pattern */}
+			<div className='absolute inset-0 bg-grid-gray-900/[0.02] dark:bg-grid-white/[0.02]' />
 
-					<div className='flex flex-col space-y-3'>
-						<h1 className='font-space-grotesk text-3xl'>Sahifalar</h1>
-						<div className='flex flex-col space-y-3 pt-6'>
+			<div className='container relative mx-auto max-w-7xl px-4 pb-12'>
+				<motion.div
+					variants={container}
+					initial='hidden'
+					whileInView='show'
+					viewport={{ once: true }}
+					className='grid grid-cols-1 gap-12 md:grid-cols-4'
+				>
+					{/* Logo and Description */}
+					<motion.div
+						variants={item}
+						className='flex flex-col space-y-4 md:col-span-2'
+					>
+						<div className='transition-transform duration-300 hover:scale-105'>
+							<Logo />
+						</div>
+						<p className='max-w-md text-gray-600 dark:text-gray-300'>
+							heroDescription
+						</p>
+					</motion.div>
+
+					{/* Navigation Links */}
+					<motion.div variants={item} className='flex flex-col space-y-4'>
+						<h2 className='bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text font-space-grotesk text-2xl font-bold text-transparent'>
+							Sahifalar
+						</h2>
+						<div className='flex flex-col space-y-2 pt-4'>
 							{navLink.map(item => (
-								<Link
+								<motion.div
 									key={item.route}
-									href={`/${item.route}`}
-									className='font-medium transition-all hover:text-blue-500 hover:underline'
+									whileHover={{ x: 5 }}
+									transition={{ type: 'spring', stiffness: 300 }}
 								>
-									{item.name}
-								</Link>
+									<Link
+										href={`/${item.route}`}
+										className='group flex items-center font-medium text-gray-600 transition-colors dark:text-gray-300'
+									>
+										{item.name}
+										<ExternalLink className='ml-1 h-3 w-3 opacity-0 transition-opacity group-hover:opacity-100' />
+									</Link>
+								</motion.div>
 							))}
 						</div>
-					</div>
+					</motion.div>
 
-					<div className='flex flex-col space-y-3'>
-						<h1 className='font-space-grotesk text-3xl'>contacts</h1>
-						<div className='flex flex-col space-y-3 pt-6'>
-							<div className='flex items-center space-x-3'>
-								<PhoneCall size={20} />
-								<div className='flex flex-col space-y-1'>
+					{/* Contact Information */}
+					<motion.div variants={item} className='flex flex-col space-y-4'>
+						<h2 className='bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text font-space-grotesk text-2xl font-bold text-transparent'>
+							Bog&apos;lanish
+						</h2>
+						<div className='flex flex-col space-y-4 pt-4'>
+							{/* Phone Numbers */}
+							<motion.div
+								className='group flex items-start space-x-3'
+								whileHover={{ x: 5 }}
+							>
+								<PhoneCall className='mt-1 h-5 w-5 text-blue-500 dark:text-blue-400' />
+								<div className='flex flex-col space-y-2'>
 									<a
-										className='text-sm hover:text-blue-500 hover:underline dark:hover:text-blue-300'
-										href='tel:+998900000000'
+										href='tel:+998771232115'
+										className='text-sm text-gray-600 transition-colors hover:text-blue-500 dark:text-gray-300 dark:hover:text-blue-400'
 									>
 										+998 (77) 123-21-15
 									</a>
-									<Separator className='dark:bg-gray-500' />
+									<Separator className='bg-gray-200 dark:bg-gray-700' />
 									<a
-										className='text-sm hover:text-blue-500 hover:underline dark:hover:text-blue-300'
-										href='tel:+31220777777'
+										href='tel:+998994573270'
+										className='text-sm text-gray-600 transition-colors hover:text-blue-500 dark:text-gray-300 dark:hover:text-blue-400'
 									>
 										+998 99 457-32-70
 									</a>
 								</div>
-							</div>
+							</motion.div>
 
-							<div className='flex items-center space-x-3'>
-								<Mail size={20} />
+							{/* Email */}
+							<motion.div
+								className='group flex items-center space-x-3'
+								whileHover={{ x: 5 }}
+							>
+								<Mail className='h-5 w-5 text-blue-500 dark:text-blue-400' />
 								<a
-									className='text-sm hover:text-blue-500 hover:underline dark:hover:text-blue-300'
-									href='mailto:info@sammi.ac'
+									href='mailto:ilxomdeveloper@gmail.com'
+									className='text-sm text-gray-600 transition-colors hover:text-blue-500 dark:text-gray-300 dark:hover:text-blue-400'
 								>
 									ilxomdeveloper@gmail.com
 								</a>
-							</div>
+							</motion.div>
 
-							<div className='flex items-center space-x-3'>
-								<MapPin size={20} />
-								<span className='text-sm'>Samarkand city, Uzbekistan</span>
-							</div>
+							{/* Address */}
+							<motion.div
+								className='group flex items-center space-x-3'
+								whileHover={{ x: 5 }}
+							>
+								<MapPin className='h-5 w-5 text-blue-500 dark:text-blue-400' />
+								<span className='text-sm text-gray-600 dark:text-gray-300'>
+									Samarkand city, Uzbekistan
+								</span>
+							</motion.div>
 						</div>
-					</div>
-				</div>
+					</motion.div>
+				</motion.div>
 
-				<div className='pt-12'>
-					<Separator className='mb-3 dark:bg-gray-500' />
-					<div className='flex gap-4'>
-						<p>© {new Date().getFullYear()}.copyright</p>
-						<a href='https://t.me/Ilhomdeveloper'>Created by IlhomDeveloper</a>
+				{/* Copyright */}
+				<motion.div
+					variants={item}
+					initial='hidden'
+					whileInView='show'
+					viewport={{ once: true }}
+					className='mt-12'
+				>
+					<Separator className='mb-6 bg-gray-200 dark:bg-gray-700' />
+					<div className='flex flex-wrap items-center justify-between gap-4 text-sm text-gray-600 dark:text-gray-400'>
+						<p>© {new Date().getFullYear()} copyright</p>
+						<motion.a
+							href='https://t.me/Ilhomdeveloper'
+							className='group flex items-center gap-1 transition-colors hover:text-blue-500 dark:hover:text-blue-400'
+							whileHover={{ scale: 1.05 }}
+						>
+							Created by IlhomDeveloper
+							<ExternalLink className='h-3 w-3 opacity-0 transition-opacity group-hover:opacity-100' />
+						</motion.a>
 					</div>
-				</div>
+				</motion.div>
 			</div>
-		</div>
+		</footer>
 	)
 }
 
