@@ -24,7 +24,7 @@ export const getArticle = async () => {
 	try {
 		await connectToDatabase()
 		const data = await Maqola.find()
-		return data
+		return JSON.parse(JSON.stringify(data))
 	} catch (error) {
 		console.error('Something went wrong while getting article !')
 	}

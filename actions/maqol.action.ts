@@ -24,7 +24,7 @@ export const getProverb = async () => {
 	try {
 		await connectToDatabase()
 		const data = await Maqol.find()
-		return data
+		return JSON.parse(JSON.stringify(data))
 	} catch (error: any) {
 		throw new Error(
 			`Something went wrong while creating proverb: ${error.message}`
